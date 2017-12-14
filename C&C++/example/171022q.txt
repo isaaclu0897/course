@@ -1,0 +1,46 @@
+QUIZ6解答
+#include <stdio.h>
+int board[5][5]; //放在main外面,讓所有function皆能看到它
+int count = 0;
+void show_board(void)
+{
+int i, j;
+for (i=1; i<=3; i++) {
+for (j=1; j<=3; j++) {
+printf(" %d", board[i][j]);
+}
+printf("\n");
+}
+printf("\n");
+}
+
+int is_valid(int row, int col)
+{
+if (board[row-1][col]) return 0;
+return 1;
+}
+void place(int row)
+{
+int j;
+if (row>3) {
+show_board();
+count++;
+} else {
+for (j=1; j<=3; j++) {
+//加入判斷, 先確定為合法再走下去
+if (is_valid(row, j)) {
+board[row][j] = 1;
+place(row+1);
+board[row][j] = 0; // erase original col guess
+}
+}
+}
+}
+
+
+int main(void)
+{
+place(1);
+printf("There are totally %d kinds of combinations\n",count);
+return 0;
+}

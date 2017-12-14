@@ -1,0 +1,9 @@
+(1) Input file: random_letter.txt
+     - 一個File內含有1000個”Peter”(每列1個,不會跨列,也不會緊臨左邊或右邊)及一堆其他不相關的字母,呈亂數分布.
+        每列100個字元, 共1000列.    
+(2) Output file: HW4_2_學號.txt
+     - 找出1000筆Peter, 並將名字前後各1個字元(每個目標共7個字元)寫入一個output file中
+     - 每列放1個結果
+(3) Hint : 可以先將搜尋結果存入2-dim array中,再寫入檔案
+ 
+(4) 因i學園無法上傳純文字檔，有需要測試檔(random_letter.txt)的同學，請直接email給我

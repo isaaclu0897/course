@@ -1,0 +1,37 @@
+//---------------------------------------------------------
+//concatenate 20 files <<Correct Version>> 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int main(void)
+{
+   int i;
+   char file_name [10];
+   char ch;
+   char str1 [10];
+   char str2 [10] = ".txt";
+   freopen("combine_file.txt","w",stdout);
+   
+   for(i=1;i<=20;i++)
+   {
+      //erase file_name
+      strcpy(file_name,"");
+      
+      itoa(i,str1,10);
+	  strcpy(file_name,str1);
+	  strcat(file_name,str2);
+
+	  freopen(file_name,"r",stdin);
+      while ((ch = getchar()) != EOF) 
+         putchar(ch);
+   }
+   return 0;
+}
+
+
+
+
+
+
+
+

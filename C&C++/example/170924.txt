@@ -1,0 +1,518 @@
+lec3_examples
+//--------------------------------------------------------------
+/*QUIZ2: 假設 : 使用者只能輸入3個整數，且第3個數只能為0或1
+Input : 讀入使用者所給的3個integers(整數)，存入三個變數: x1, x2, sel
+Output: x1, if sel 等於 0
+x2, if sel 等於 1
+*/
+#include <stdio.h>
+int main(void)
+{
+int x1, x2, sel, x3;
+scanf("%d%d%d",&x1,&x2,&sel);
+x3 = ((sel+1)%2)*x1 + (sel%2)*x2;
+printf("The desired output is %d\n",x3);
+
+return 0;
+}
+
+//--------------------------------------------------------------
+//HW2: use double loop
+/* try to plot
+
+1 ********* 2 *
+******** **
+******* ***
+****** ****
+***** *****
+**** ******
+*** *******
+** ********
+* *********
+
+*/
+//Pic 1
+#include <stdio.h>
+int main(void)
+{
+int i, j;
+i = 1;
+while(i<=9)
+{
+j = 1;
+while(j<i)
+{
+printf(" ");
+j++;
+}
+while(j<=9)
+{
+printf("*");
+j++;
+}
+printf("\n");
+i++;
+}
+return 0;
+}
+//------------------------
+//Pic 2
+#include <stdio.h>
+int main(void)
+{
+int i, j;
+i = 1;
+while(i<=9)
+{
+j = 1;
+while(j<=(9-i))
+{
+printf(" ");
+j++;
+}
+while(j<=9)
+{
+printf("*");
+j++;
+}
+printf("\n");
+i++;
+}
+return 0;
+}
+
+
+//--------------------------------------------------------------
+//EX1: use double loop to assign 2-dim array (99乘法表)
+#include <stdio.h>
+void show_array(int, int);
+int a[9][9];
+int main(void)
+{
+int row=9, col=9;
+int i,j;
+i=0;
+while(i<row)
+{
+j=0;
+while(j<col)
+{
+a[i][j] = (i+1)*(j+1);
+j++;
+}
+i++;
+}
+show_array(row,col);
+
+return 0;
+}
+
+void show_array(int row, int col)
+{
+int i=0,j;
+while(i<row)
+{
+j=0;
+while(j<col)
+{
+printf("%1d*%1d=%2d ",i+1,j+1,a[i][j]);
+j++;
+}
+printf("\n");
+i++;
+}
+}
+
+//--------------------------------------------------------------
+//EX2: use double loop to create pascal triangle (for 二項式定理)
+/*
+How to print a Pascal Triangle?
+Try it yourself.
+j=0 j=1 j=2 j=5
+i=0 0 0 0 0 0 0
+i=1 0 1 0 0 0 0
+0 1 1 0 0 0
+0 1 2 1 0 0
+0 1 3 3 1 0
+i=5 0 1 4 6 4 1
+...
+*/
+#include <stdio.h>
+
+int main(void)
+{
+int i, j;
+int a[10][10] = {0}; 
+
+a[1][1] = 1; // assign the starting seed
+
+i = 2;
+while (i<=9) 
+{
+j = 1;
+while (j<=9)
+{
+a[i][j] = a[i-1][j-1] + a[i-1][j]; /* a[i][j] ith row, jth column */
+j = j + 1;
+}
+i = i + 1;
+}
+
+/* show the content of a */
+i = 0;
+while (i<=9) 
+{
+j = 0;
+while (j<=9)
+{
+printf("%3d ", a[i][j]);
+j = j + 1;
+}
+printf("\n");
+i = i + 1;
+}
+
+return 0;
+}
+
+
+//---------------------------------------------------------------------
+//EX3: diff btw i++ & ++i
+#include <stdio.h>
+
+int main(void)
+{
+int i,j,a,b;
+i=j=1;
+a = i++;
+b = ++j;
+printf("%d %d %d %d\n",i,j,a,b);
+
+return 0;
+}
+
+
+//---------------------------------------------------------------------
+//EX4: Upper case ==> Lower case
+#include <stdio.h>
+
+int main(void)
+{
+char c;
+printf("Enter an upper-case letter: ");
+scanf("%c",&c);
+printf("\nYour original input is: %c\n", c);
+c = c + 'a' - 'A';
+printf("The corresponding lower case is: %c\n", c);
+
+return 0;
+}
+
+//---------------------------------------------------------------------
+//EX5-1: Use while loop to create desired time delay
+#include <stdio.h>
+#include <string.h>
+#define STAR "***********************************************************"
+
+int main(void)
+{
+int i=1, j=0;
+while(i<=strlen(STAR))
+{
+printf("%.*s\n",i,STAR);
+i++;
+j = 0;
+while(j<500000000) j++;
+}
+
+return 0;
+}
+
+
+//EX5-2: Use while loop to create desired time delay
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+char word[30];
+int i,j;
+printf("Enter a word: ");
+scanf("%29s",word);
+printf("%*.*s\n",5,3,word);
+
+i = 1;
+while(i<=strlen(word))
+{
+printf("%*.*s\n",strlen(word),i++,word);
+j = 0;
+while(j<500000000) j++;
+}
+
+return 0;
+}
+
+//---------------------------------------------------------------------
+//EX6-1: printf() with expressions
+#include <stdio.h>
+
+int main(void)
+{
+int i = 3;
+printf("%d\n",i>5);
+i = 13;
+printf("%d\n",i>5);
+
+return 0;
+}
+
+//EX6-2: show expression "True" or "False"
+#include <stdio.h>
+int check(int true)
+{
+if(true)
+printf("True\n");
+else
+printf("False\n");
+
+return true; 
+}
+int main(void)
+{
+int x = 5; 
+int y = 3;
+
+check(x > 2 && y == 3);
+check( !(x < 2 || y == 3) );
+check(x != 0 && y);
+check(x == 0 || !y);
+check(x != y && (20/x) < y);
+check( !(y>5 || y<2) && !(x%5) );
+check(!x && x);
+
+return 0;
+}
+
+
+//---------------------------------------------------------------------
+//EX7: try to use "if" to rewrite QUIZ 2
+#include <stdio.h>
+int main(void)
+{
+int x1, x2, sel;
+scanf("%d%d%d",&x1,&x2,&sel);
+if (sel == 0)
+printf("The desired output is %d\n",x1);
+else if (sel == 1)
+printf("The desired output is %d\n",x2);
+
+return 0;
+}
+
+//---------------------------------------------------------------------
+//EX8-1: 10進位 ==> 2進位 (Method 1)
+#include <stdio.h>
+
+int main(void)
+{
+int data[32],x,i;
+int max_num = 1000000;
+printf("Enter a positive number less than %d: ",max_num);
+scanf("%d",&x);
+i = 0;
+while(x > 0)
+{
+data[i] = x%2;
+x = x/2;
+i++;
+}
+i--;
+while(i>=0)
+{
+printf("%d",data[i]);
+i--;
+}
+
+return 0;
+}
+
+//EX8-2: 10進位 ==> 2進位 (Method 2)
+#include <stdio.h>
+
+int main(void)
+{
+int x,i;
+int max_num = 1000000;
+printf("Enter a positive number less than %d: ",max_num);
+scanf("%d",&x);
+i = 1;
+while(i<x)
+{
+i = i*2;
+}
+if(i>x)
+i = i/2;
+while(i>0)
+{
+printf("%d",x/i);
+x = x%i;
+i=i/2;
+}
+
+return 0;
+}
+
+//---------------------------------------------------------------------
+//EX9-1: more on "scanf()"
+#include <stdio.h>
+
+int main(void)
+{
+int num1, num2;
+int status1,status2,status3;
+
+printf("Please enter an integer number:");
+status1 = scanf("%d", &num1);
+printf("status1 = %d\n", status1);
+printf("num1 = %d, num2 = %d\n",num1,num2);
+
+printf("Please enter 2 integer numbers:");
+status2 = scanf("%d%d", &num1, &num2);
+printf("status2 = %d\n", status2);
+printf("num1 = %d, num2 = %d\n",num1,num2);
+
+printf("Please enter an integer number:");
+status3 = scanf("%d", &num1);
+printf("status3 = %d\n", status3);
+printf("num1 = %d, num2 = %d\n",num1,num2);
+
+return 0;
+}
+
+
+//EX9-2: more on "scanf()" and "=="
+#include <stdio.h>
+
+int main(void)
+{
+int num;
+int sum = 0;
+int status;
+
+printf("Please enter an integer to be summed ");
+printf("(q to quit): ");
+status = scanf("%d", &num);
+/*printf("status: %d\n", status);*/
+while (status == 1) { /* == means "is equal to" */
+sum = sum + num;
+printf("Please enter next integer (q to quit): ");
+status = scanf("%d", &num);
+/* printf("status: %d\n", status); */
+}
+printf("Those integers sum to %d.\n", sum);
+
+return 0;
+}
+
+//EX9-3: more on "scanf()" and "=="
+// What if "==" has a type of"=" ?????
+// press [Ctrl + c] to terminate the loop 
+#include <stdio.h>
+
+int main(void)
+{
+int num;
+int sum = 0;
+int status;
+
+printf("Please enter an integer to be summed ");
+printf("(q to quit): ");
+status = scanf("%d", &num);
+/*printf("status: %d\n", status);*/
+while (status = 1) { /* == means "is equal to" */
+sum = sum + num;
+printf("Please enter next integer (q to quit): ");
+status = scanf("%d", &num);
+/* printf("status: %d\n", status); */
+}
+printf("Those integers sum to %d.\n", sum);
+
+return 0;
+}
+
+
+//EX9-4: more on "scanf()" and "EOF"
+#include <stdio.h>
+
+int main(void)
+{
+int x;
+
+while (scanf("%d", &x) != EOF) { /*Ctrl Z + Enter */
+printf("x=%d\n", x);
+}
+
+printf("the value of EOF is %d\n",EOF);
+return 0;
+}
+
+
+//---------------------------------------------------------------------
+//EX10-1: For Loop (等差級數)
+#include <stdio.h>
+int main(void)
+{
+int i,sum = 0;
+int start,end,delta;
+printf("Enter the start value, the end value, and the delta value: ");
+scanf("%d%d%d",&start,&end,&delta);
+for(i=start;i<=end;i=i+delta)
+{
+sum = sum + i;
+}
+printf("the sum is %d\n", sum);
+
+return 0;
+}
+
+//EX10-2: For Loop (等比級數)
+#include <stdio.h>
+int main(void)
+{
+int i,sum = 0;
+int start,end,ratio;
+printf("Enter the start value, the end value, and the ratio: ");
+scanf("%d%d%d",&start,&end,&ratio);
+for(i=start;i<=end;i=i*ratio)
+{
+sum = sum + i;
+}
+printf("the sum is %d\n", sum);
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX11: 韓信點兵, 每8人一隊或7人一隊都餘1人, 每5人一隊餘2, 已知兵員略多於兩千人, 則兵員共有多少人?
+
+#include <stdio.h>
+
+int main(void)
+{
+int i;
+int found = 0;
+for(i=2000;i<4000;i++)
+{
+if((i%8 == 1) && (i%7 == 1) && (i%5 == 2))
+{
+found = 1;
+break;
+}
+}
+if(found == 1)
+printf("The correct answer is %d\n",i);
+
+return 0;
+}
+
+

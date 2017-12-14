@@ -1,0 +1,501 @@
+lec5_examples
+//---------------------------------------------------------
+//EX1-1: 使用迴圈吃掉 '\n' 之前的多餘的字元
+#include <stdio.h>
+
+int main(void)
+
+{
+int guess = 1;
+
+printf("Choose an integer between 1 ~ 100. I will try to guess it.\n");
+printf("Press \"y\" if my guess is right and press \"n\" if it's wrong.\n");
+printf("Uh...is your number %d?\n", guess);
+
+while (getchar() != 'y')
+{
+guess++;
+printf("Well, then, is it %d?\n", guess);
+//while(getchar() != '\n'); // debug 1 ==> CANNOT fix " y"-error
+} 
+
+printf("I knew I could do it!\n");
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX1-2: 再修正錯誤，改變結構，吃掉 '\n' 以及 ' '
+#include <stdio.h>
+
+int main(void)
+
+{
+int guess = 1;
+char ch;
+
+printf("Choose an integer between 1 ~ 100. I will try to guess it.\n");
+printf("Press \"y\" if my guess is right and press \"n\" if it's wrong.\n");
+printf("Uh...is your number %d?\n", guess);
+
+printf("Is it %d?\n", guess);
+ch = getchar();
+while (ch != 'y')
+{
+if (ch == 'n')
+{
+guess++;
+printf("Well, then, is it %d?\n", guess);
+ch=getchar();
+}
+else // meet ' ' or '\n' ==> jump over it
+{
+ch=getchar();
+}
+}
+
+printf("I knew I could do it!\n");
+return 0;
+}
+
+
+//---------------------------------------------------------
+//EX1-3: 使用迴圈吃掉 '\n' 之前的多餘的字元
+/* input format (the wanted char must be put in the 1st place)
+(1):@ 3 5 \n
+(2):@ \n
+3 \n
+5 \n
+/*
+
+ 
+
+
+#include <stdio.h>
+void display(char cr, int lines, int width);
+
+int main (void)
+
+{
+int ch;
+int rows, cols;
+
+printf("Enter a character and two integers:\n");
+
+while ((ch = getchar()) != '\n') {
+scanf("%d%d", &rows, &cols);
+// if(scanf("%d%d", &rows, &cols) !=2) break; //guarantee correct input 
+display(ch, rows, cols);
+printf("Enter another character and two integers;\n");
+printf("Enter a newline to quit.\n");
+//while((ch = getchar()) != '\n'); //jump over default \n 
+}
+
+printf("Bye.\n");
+
+return 0;
+}
+
+void display(char cr, int lines, int width)
+
+{
+int row, col;
+for(row = 1; row <=lines; row++)
+{
+for (col = 1; col <= width; col++)
+putchar(cr);
+putchar('\n');
+}
+}
+
+ 
+
+//---------------------------------------------------------
+//EX2-1: 無限遞迴
+#include <stdio.h>
+int f(int n)
+{
+int i=0;
+
+while(i<50000000) i++;
+printf("%d ",n);
+return(f(n-1));
+}
+
+
+int main(void)
+{
+int i=5;
+printf("%d\n", f(i));
+
+return 0;
+}
+
+
+//---------------------------------------------------------
+
+//EX2-2: observe遞迴
+#include <stdio.h>
+int f(int n)
+{
+int ans;
+
+if(n==0)
+return 0;
+
+printf("(%d ",n); //(5 (4 (3 ( 2(1 1) 2) 3) 4) 5) 
+ans = f(n-1);
+printf("%d) ",n);
+
+return(ans); 
+}
+
+
+int main(void)
+{
+int i=5;
+printf("result:%d\n", f(i));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX3: 階層計算
+#include <stdio.h>
+int factorial(int n)
+{
+if((n==1)||(n==0)) // beware 0! = 1
+return(1);
+else
+return(n*factorial(n-1));
+}
+
+
+int main(void)
+{
+int i;
+for (i=0; i <= 10; i++)
+printf("%d! = %d\n", i , factorial(i));
+
+return 0;
+}
+
+
+//---------------------------------------------------------
+//EX4: 費布那西數列
+#include <stdio.h>
+int fibo(int n)
+{
+if(n==0)
+return(0);
+else if(n==1)
+return(1);
+else
+return(fibo(n-1)+fibo(n-2));
+}
+
+
+int main(void)
+{
+int i;
+for (i=0; i <= 10; i++)
+printf("F%d = %d\n", i , fibo(i));
+
+return 0;
+}
+
+
+//---------------------------------------------------------
+//EX5-1:calculate M^N
+#include <stdio.h>
+double power(double m, int n)
+{
+if(n==0)
+return 1;
+else if(n%2 ==0)
+return power(m,n/2)*power(m,n/2);
+else
+return m*power(m,n/2)*power(m,n/2);
+}
+
+
+int main(void)
+{
+int m,n;
+m=7;
+for (n=0; n <= 10; n++)
+printf("%d^%d = %f\n", m, n, power(m,n));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX5-2:another way to calculate M^N
+#include <stdio.h>
+double power(double m, int n)
+{
+if(n==0)
+return 1;
+else
+return m*power(m,n-1);
+}
+
+
+int main(void)
+{
+int m,n;
+m=7;
+for (n=0; n <= 10; n++)
+printf("%d^%d = %f\n", m, n, power(m,n));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX6:sum of natural numbers
+#include <stdio.h>
+int sum(int n)
+{
+if(n==1)
+return 1;
+else
+return(n+sum(n-1));
+}
+
+
+int main(void)
+{
+int i;
+for (i=1; i <= 10; i++)
+printf("1 + ... %d = %d\n", i , sum(i));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX7-1: calculate the Greatest Common Divisor(gcd 最大公因數) of 2 natural numbers(Use Recursion)
+#include <stdio.h>
+int gcd(int a, int b)
+{
+if(b%a==0)
+return a;
+else
+return gcd(b%a,a);
+}
+
+
+int main(void)
+{
+int a=52, b=64; //Order is NOT important
+printf("gcd(%d,%d)=%d\n", a, b, gcd(a,b));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX7-2: calculate gcd (NOT use recursion)
+#include <stdio.h>
+int gcd(int a, int b)
+{
+int tmp,residue;
+if(a>b)
+{
+tmp = a;
+a = b;
+b = tmp;
+}
+while((residue=(b%a)) != 0)
+{
+b = a;
+a = residue;
+}
+return a;
+}
+
+
+int main(void)
+{
+int a=64, b=52;
+printf("gcd(%d,%d)=%d\n", a, b, gcd(a,b));
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX8: list all binary combinations
+#include <stdio.h>
+
+char bits[64];
+int N; //# of bits
+void show_combination(int);
+
+int main(void)
+{
+printf("Enter interested number of bits(<64):");
+scanf("%d",&N);
+bits[N] = '\0';
+show_combination(0);
+
+return 0;
+}
+
+void show_combination(int bit_position)
+{
+if(bit_position == N)
+printf("%s\n",bits);
+else
+{
+bits[bit_position] = '0';
+show_combination(bit_position+1);
+bits[bit_position] = '1';
+show_combination(bit_position+1);
+}
+}
+
+//---------------------------------------------------------
+//EX9-1:先完成列印部份 
+#include <stdio.h>
+void show_number(int n);
+
+int main(void)
+{
+int n;
+scanf("%d", &n);
+show_number(n);
+return 0;
+}
+
+void show_number(int n)
+{
+if(n==1) printf("%d",n);
+else if(n%2==0)
+{
+show_number(n-1);
+printf("+%d",n);
+}
+else if(n%2 == 1)
+{
+printf("(");
+show_number(n-1);
+printf(")*%d",n);
+}
+}
+
+
+//---------------------------------------------------------
+//EX9-2:再完成計算部份 
+#include <stdio.h>
+int show_number(int n);
+
+int main(void)
+{
+int n,ans;
+scanf("%d", &n);
+ans = show_number(n);
+printf("=%d\n",ans);
+return 0;
+}
+
+int show_number(int n) //void --> int
+{
+int ans;// add return value
+if(n==1)
+{
+printf("%d",n);
+ans = 1; // remember to return 1
+}
+else if(n%2==0)
+{
+ans = show_number(n-1)+n; //calculate ans
+printf("+%d",n);
+
+}
+else if(n%2 == 1)
+{
+printf("(");
+ans = show_number(n-1)*n; // calculate ans
+printf(")*%d",n);
+}
+
+return ans;
+}
+
+//---------------------------------------------------------
+//EX10:老鼠走迷宮(找出一條路徑)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int visit(int, int, int);
+
+int maze[7][7] = {{2, 2, 2, 2, 2, 2, 2}, 
+{2, 0, 0, 0, 0, 0, 2}, 
+{2, 0, 2, 0, 2, 0, 2}, 
+{2, 0, 0, 2, 0, 2, 2}, 
+{2, 2, 0, 2, 0, 2, 2}, 
+{2, 0, 0, 0, 0, 0, 2}, 
+{2, 2, 2, 2, 2, 2, 2}};
+
+int startI = 1, startJ = 1; // start point
+int endI = 5, endJ = 5; // end point
+
+
+int main(void) { 
+int i, j;
+//int success = 0;
+
+printf("Show Maze:\n"); 
+for(i = 0; i < 7; i++) { 
+for(j = 0; j < 7; j++) 
+if(maze[i][j] == 2) 
+printf("#"); 
+else 
+printf(" "); 
+printf("\n"); 
+}
+
+if(visit(startI, startJ,0) == 0)
+printf("\nNo path is found!\n"); 
+else { 
+printf("\nShow Path:\n"); 
+for(i = 0; i < 7; i++) { 
+for(j = 0; j < 7; j++) { 
+if(maze[i][j] == 2) 
+printf("#"); 
+else if(maze[i][j] == 1) 
+printf("."); 
+else 
+printf(" "); 
+} 
+printf("\n"); 
+} 
+}
+
+return 0; 
+}
+
+int visit(int i, int j, int success) { 
+
+maze[i][j] = 1;
+
+if(i == endI && j == endJ)
+{
+success = 1;
+}
+else
+{
+if(maze[i][j+1] == 0) 
+success = visit(i, j+1, success); 
+if(success == 0 && maze[i+1][j] == 0) 
+success = visit(i+1, j, success); 
+if(success == 0 && maze[i][j-1] == 0)
+success = visit(i, j-1, success); 
+if(success == 0 && maze[i-1][j] == 0)
+success = visit(i-1, j, success);
+
+if(success != 1) 
+maze[i][j] = 0;
+}
+
+return success; 
+}

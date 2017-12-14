@@ -1,0 +1,588 @@
+lec2_examples
+//-----------------------------------------
+//Special EX1: debugging 1 (Observe prompted messages)
+
+#include <stdio.h>
+
+int main(void)
+
+{
+int fahr, int celsius;
+
+/* this program needs debugging
+
+fahr = 212;
+celsius = 9 * (fahr - 32) / 5;
+
+//Try versions:
+//celsius = (fahr - 32)*(5/9);
+//celsius = ((fahr - 32)*5)/9;
+
+printf(" %d degrees Fahrenheit = %d degrees Celsius.\n", Fahr)
+return 0;
+}
+
+0 --> 100 delta value = 100
+32 --> 212 delta value = 180 (C-0)/100 = (F-32)/180 ==> C = (5/9)*(F-32)
+
+//-----------------------------------------
+//Special EX2: debugging 2 (Use IDE bebugger)
+
+#include <stdio.h>
+
+int main(void)
+
+{
+int x,y;
+x = 3;
+y = 2;
+x = x*y;
+y = x%4;
+printf("x=%d, y=%d\n", x,y);
+return 0;
+}
+
+//------------------------------------------
+//EX1: type error experiment:printf()
+#include <stdio.h>
+int main(void)
+{
+int x;
+float y;
+
+x = 1516;
+y = 3.14159;
+printf("x = %d\n", x);
+printf("y = %10.5f\n", y);
+printf("x = %f\n", x);
+printf("y = %d\n", y);
+
+return 0;
+}
+
+//------------------------------------------
+//EX2: type error experiment:scanf()
+#include <stdio.h>
+int main(void)
+{
+float y;
+
+//Let y = 3.14159;
+printf("Enter a real number: ");
+scanf("%f",&y);
+printf("y = %f\n", y);
+printf("Enter the same real number again: ");
+scanf("%lf",&y);
+printf("y = %f\n", y);
+
+return 0;
+}
+
+// ------------------------------------------------------------
+
+//EX3: sizeof()
+#include <stdio.h>
+#include <float.h>
+
+int main(void)
+
+{
+char a;
+int b;
+float c;
+double d;
+short e;
+long f;
+unsigned g;
+long long h;
+
+
+printf("The size of a char is %u bytes\n", sizeof(a));
+printf("The size of an int is %u bytes\n", sizeof(b));
+printf("The size of a float is %u bytes\n", sizeof(c));
+printf("The size of a double is %u bytes\n", sizeof(d));
+printf("The size of a short is %u bytes\n", sizeof(e));
+printf("The size of a long is %u bytes\n", sizeof(f));
+printf("The size of an unsigned is %u bytes\n", sizeof(g));
+printf("The size of a longlong is %u bytes\n", sizeof(h));
+
+
+printf("Minimum float positive value: %E\n", FLT_MIN );
+printf("Maximum float positive value: %E\n", FLT_MAX );
+printf("Precision value: %d\n", FLT_DIG );
+return 0;
+}
+
+// --------------------------------------------------------------
+//EX4: function
+#include <stdio.h>
+double square(double);
+int main(void)
+{
+double x;
+x = 3.2;
+printf("%f square is %f\n", x,square(x));
+return 0;
+}
+
+double square(double x)
+{
+return x*x;
+}
+
+// -----------------------------------------------------------
+//EX5: observe the effective scope of variable in function
+#include <stdio.h>
+double square(double);
+int main(void)
+{
+double x, y;
+x = 3.2;
+y = 1.1;
+printf("in main, x = %f\n",x);
+printf("%f square is %f\n", x,square(x));
+printf("in main, x = %f\n",x);
+return 0;
+}
+
+double square(double x)
+{
+printf("in square, x = %f\n",x);
+//variable y CANNOT be seen in function
+//printf("in square, y = %f\n",y);
+x = x + 1;
+printf("in square, x = %f\n",x);
+return x*x;
+}
+
+// ------------------------------------------------------------
+//EX6-1: 練習scanf()
+#include <stdio.h>
+float square(float y)
+{
+return y*y;
+}
+int main(void)
+{
+float x;
+scanf("%f", &x);
+printf("%f square = %f\n", x, square(x));
+return 0;
+}
+
+// ------------------------------------------------------------
+//EX6-2: % acts as MUX
+#include <stdio.h>
+
+int main(void)
+{
+float a = 1.1, b=2.2, c;
+int sel;
+printf("Try to input a non-negative interger:");
+scanf("%d", &sel);
+c = (sel%2)*a+((sel+1)%2)*b;
+printf("Your desired output is %f\n", c);
+return 0;
+}
+
+// ------------------------------------------------------------
+//EX7-1: int array
+#include <stdio.h>
+int main(void)
+{
+int x[10] = {0};
+// Note: Codeblocks supports initializing an 1-dim array with other non-zero values
+printf("x[0] = %d\n", x[0]);
+x[0] = 3;
+printf("x[0] = %d\n", x[0]);
+
+int y[5] = {2, 4, 6, 8, 10};
+printf("y[3] = %d\n", y[3]);
+
+return 0;
+}
+
+// ------------------------------------------------------------
+//EX7-2: char (ASCII Concept)
+#include <stdio.h>
+int main(void)
+{
+char ch = 'A';
+printf("ch = %c\n",ch);
+printf("ch = %d\n",ch);
+ch = 66;
+printf("ch = %c\n",ch);
+printf("ch = %d\n",ch);
+ch = ch + 1;
+printf("ch = %c\n",ch);
+printf("ch = %d\n",ch);
+ch ++;
+printf("ch = %c\n",ch);
+printf("ch = %d\n",ch);
+
+return 0;
+}
+
+// ------------------------------------------------------------
+//EX7-3: char array
+#include <stdio.h>
+
+int main(void)
+{
+char ch[10] = {'A','B','C','D','E','F','G','H','I','J'};
+int i;
+printf("Enter an interested index ==> ");
+scanf("%d", &i);
+printf("OK. Your interested element is %c\n",ch[i]);
+//try: printf("OK. Your interested element is %c\n",ch[i%10]);
+
+return 0;
+}
+
+// ------------------------------------------------------------
+//EX7-4: char array
+#include <stdio.h>
+
+int main(void)
+{
+char ch[10] = {'A','B','C','D','E','F','G','H','I','J'};
+int i;
+printf("Enter one 2-digit number ==> ");
+scanf("%d", &i);
+printf("%c%c\n",ch[i/10],ch[i%10]);
+
+return 0;
+}
+
+//----------------------------------------------------------
+//EX8-1: string practice
+/*NOTE: 1. the scanf() command, %9s, name ==> try input a looooong name :D
+2. strlen()
+3. sizeof() */
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+char name[10]; /* character array, string */
+printf("Hello! What's your name? ");
+scanf("%9s", name );
+printf("\nGood afternoon, %s!! Nice to meet you.\n", name);
+printf("By the way, your name has %d letters,\n", strlen(name));
+printf("and we use %d bytes of memory to store it.\n", sizeof(name));
+
+return 0;
+}
+
+//----------------------------------------------------------
+//EX8-2: string
+#include <stdio.h>
+#include <string.h>
+#define THIS_YEAR 2017
+
+int main(void)
+{
+char name[10]; /* character array, string */
+int year;
+printf("Hello! What's your name? ");
+scanf("%9s", name );
+printf("\nGood afternoon, %s!! Nice to meet you.\n", name);
+printf("What is your year of birth? ");
+scanf("%d",&year);
+printf("\nWell...I guess you must be %d years old.\n",THIS_YEAR-year);
+printf("By the way, your name has %d letters,\n", strlen(name));
+printf("and we use %d bytes of memory to store it.\n", sizeof(name));
+
+return 0;
+}
+
+//----------------------------------------------------------
+//EX8-3: string
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+char name[10]; /* character array, string */
+printf("Hello! What's your name? "); // use Tommy
+scanf("%9s", name );
+printf("\nGood afternoon, %s!! Nice to meet you.\n", name);
+printf("By the way, your name has %d letters,\n", strlen(name));
+printf("and we use %d bytes of memory to store it.\n", sizeof(name));
+
+printf("\nNow, let's play some games....\n");
+name[3] = '\0';
+printf("\nGood afternoon, %s!! Nice to meet you.\n", name);
+printf("By the way, your name has %d letters,\n", strlen(name));
+printf("and we use %d bytes of memory to store it.\n", sizeof(name));
+
+return 0;
+}
+
+//----------------------------------------------------------------------------------
+//EX9-1
+#include <stdio.h>
+#define ENGINE 1499.99
+int main(void)
+{
+printf("~%f~\n", ENGINE);
+printf("~%e~\n", ENGINE);
+printf("~%4.2f~\n", ENGINE);
+printf("~%3.1f~\n", ENGINE);
+printf("~%10.3f~\n", ENGINE);
+printf("~%-10.3f~\n", ENGINE);
+printf("~%12.3e~\n", ENGINE);
+printf("~%+4.2f~\n", ENGINE);
+printf("~%010.2f~\n", ENGINE);
+return 0;
+}
+
+//----------------------------------------------------------
+//EX9-2:
+#include <stdio.h>
+int main(void)
+{
+int width, precision;
+double rate = 123.45;
+printf("Enter a width and a precision: ");
+scanf("%d%d", &width, &precision);
+printf("rate: '%*.*f'\n", width, precision, rate);
+return 0 ;
+}
+
+//----------------------------------------------------------
+//EX9-3:
+#include <stdio.h>
+#include <string.h>
+#define BORDER "############################################"
+int main(void)
+{
+char word[26];
+scanf("%25s", word);
+printf("%.*s\n", strlen(word)+2, BORDER);
+printf("#%s#\n", word); 
+printf("%.*s\n", strlen(word)+2, BORDER);
+
+return 0 ;
+}
+/*
+Input: University
+############
+#University#
+############
+*/
+
+//----------------------------------------------------------------------------------
+//EX10: macros
+#include <stdio.h>
+
+int main(void)
+{
+printf("%s\n", __FILE__);
+printf("%d\n", __LINE__);
+printf("%s\n", __func__);
+printf("%s\n", __DATE__);
+printf("%s\n", __TIME__);
+
+return 0 ;
+}
+
+
+//--------------------------------------------------------------
+//EX11-1: while loop
+#include <stdio.h>
+int main(void)
+{
+int i, sum;
+
+sum = 0;
+i = 1;
+while (i<=100) {
+sum = sum + i;
+i = i + 1;
+}
+printf("1+2+3+...+100 = %d\n", sum);
+
+return 0;
+}
+
+//---------------------------------------------------------------
+//EX11-2: while loop
+#include <stdio.h>
+int main(void)
+{
+int x, n;
+int i, sum;
+int a[50];
+
+printf("How many numbers? (n<50) ");
+scanf("%d", &n);
+i = 0;
+while (i<n) {
+printf("Input a[%d]: ", i);
+scanf("%d", &x);
+printf("The number is %d\n", x);
+a[i] = x;
+i = i + 1;
+}
+i = 0;
+sum = 0;
+while (i<n) {
+printf("%d + ", a[i]);
+sum = sum + a[i];
+i++;
+}
+printf("\b\b= %d\n", sum);
+
+return 0;
+}
+
+//---------------------------------------------------------------
+//EX11-3: while loop
+#include <stdio.h>
+#define STEP 10
+#define LOWER -60
+#define UPPER 100
+int main(void)
+{
+int fahr, celsius;
+
+printf("Celsius Fahrenheit\n");
+printf("---------------------\n");
+celsius = LOWER;
+while (celsius <= UPPER) {
+fahr = 1.8*celsius + 32;
+printf("%4d %12d\n", celsius, fahr);
+celsius = celsius + STEP;
+}
+printf("---------------------\n");
+
+return 0;
+}
+
+//--------------------------------------------------------------
+//use double loop
+/* try to plot different shapes */
+
+//EX12-1: Rectangle
+#include <stdio.h>
+int main(void)
+{
+int i, j;
+
+i = 1;
+while(i<=9)
+{
+j = 1;
+while(j<=9)
+{
+printf("*");
+j++;
+}
+printf("\n");
+i++;
+}
+
+return 0;
+}
+
+//--------------------------------------------------------------
+//EX12-2: triangle (I)
+#include <stdio.h>
+
+int main(void)
+{
+int i, j;
+
+i = 1;
+while(i<=9)
+{
+j = 1;
+while(j<=i)
+{
+printf("*");
+j++;
+}
+printf("\n");
+i++;
+}
+
+return 0;
+}
+
+//--------------------------------------------------------------
+//EX12-3: triangle (II)
+#include <stdio.h>
+
+int main(void)
+{
+int i, j;
+
+i = 1;
+while(i<=9)
+{
+j = 1;
+while(j<=(10-i))
+{
+printf("*");
+j++;
+}
+printf("\n");
+i++;
+}
+
+return 0;
+}
+
+//--------------------------------------------------------------
+//EX12-4: 2-dim array
+/*
+
+int a[10][10] = {0}; a[0][0] a[0][1] a[0][2] .... a[0][9]
+a[1][0] a[1][1] ...
+. .
+. .
+. .
+a[9][0] a[9][1] ... a[9][9]
+
+
+*/
+#include <stdio.h>
+#define ROW 10
+#define COL 10
+void show_array(int, int);
+//Try different intial assignments
+int a[ROW][COL] = {0}; //==> Codeblocks GCC bug 53119 : warning: missing braces around initializer
+/*
+Solution:
+(1) ignore it
+(2) try int a[ROW][COL] = {{0}};
+*/
+//int a[ROW][COL] = {1,2,3,4};
+//int a[ROW][COL] = {{1,2,3,4},{5,6,7,8,9}};
+//int a[ROW][COL] = {{1,2,3,4,5,6,7,8,9,10,11,12,13}};
+//int a[ROW][COL] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
+
+int main(void)
+{
+int row=ROW, col=COL;
+show_array(row,col);
+
+return 0;
+}
+
+void show_array(int row, int col)
+{
+int i=0,j;
+while(i<row)
+{
+j=0;
+while(j<col)
+{
+printf("%3d ",a[i][j]);
+j++;
+}
+printf("\n");
+i++;
+}
+}

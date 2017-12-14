@@ -1,0 +1,310 @@
+lec6_examples
+//EX1: Hanoi Tower
+#include <stdio.h>
+
+int steps = 0; // count # of moves
+
+void hanoi(int N, int from, int to, int buf)
+{
+if(N == 1){
+printf("%d --> %d\n",from,to);
+steps++;
+}
+else{
+hanoi(N-1, from, buf, to);
+printf("%d --> %d\n",from,to);
+steps++;
+hanoi(N-1, buf, to, from);
+}
+}
+
+int main(void)
+{
+int N; // # of disks
+printf("Enter number of disks: ");
+scanf("%d",&N);
+hanoi(N,1,3,2); // move from 1 to 3 by using 2 as buffer
+printf("Total number of moves is %d\n",steps);
+return 0;
+}
+//---------------------------------------------------------
+//EX2: 3個城堡
+#include <stdio.h>
+int board[5][5]; //放在main外面,讓所有function皆能看到它
+void show_board(void)
+{
+int i, j;
+for (i=1; i<=3; i++) {
+for (j=1; j<=3; j++) {
+printf(" %d", board[i][j]);
+}
+printf("\n");
+}
+printf("\n");
+}
+
+int is_valid(int row, int col)
+{
+int i;
+for (i=1; i<row; i++) {
+if (board[i][col]) return 0;
+}
+return 1;
+}
+void place(int row)
+{
+int j;
+if (row>3) {
+show_board();
+} else {
+for (j=1; j<=3; j++) {
+//加入判斷, 先確定為合法再走下去
+if (is_valid(row, j)) {
+board[row][j] = 1;
+place(row+1);
+board[row][j] = 0; // erase original col guess
+}
+}
+}
+}
+
+
+int main(void)
+{
+place(1);
+return 0;
+}
+
+//---------------------------------------------------------
+//EX3:4個皇后
+#include <stdio.h>
+int board[6][6]; //放在main外面,讓所有function皆能看到它
+void show_board(void)
+{
+int i, j;
+for (i=1; i<=4; i++) {
+for (j=1; j<=4; j++) {
+printf(" %d", board[i][j]);
+}
+printf("\n");
+}
+printf("\n");
+}
+
+int is_valid(int row, int col)
+{
+int i,j;
+for (i=1; i<row; i++) {
+if (board[i][col]) return 0;
+}
+//增加對角方向之檢查
+i = row-1;
+j = col-1;
+while(i>=1 && j>=1){
+if (board[i][j]) return 0;
+i--;
+j--;
+}
+i = row-1;
+j = col+1;
+while(i>=1 && j<=4){
+if (board[i][j]) return 0;
+i--;
+j++;
+}
+return 1;
+}
+void place(int row)
+{
+int j;
+if (row>4) {
+show_board();
+} else {
+for (j=1; j<=4; j++) {
+//加入判斷, 先確定為合法再走下去
+if (is_valid(row, j)) {
+board[row][j] = 1;
+place(row+1);
+board[row][j] = 0; // erase original guess
+}
+}
+}
+}
+
+
+int main(void)
+{
+place(1);
+return 0;
+}
+
+//---------------------------------------------------------
+//EX4:換零錢
+#include <stdio.h>
+#define MAX_TYPE 5 //assume MAX types of coin 5
+int value[MAX_TYPE];
+int number[MAX_TYPE];
+int value_type; // # of coin types
+
+void show(void);
+void change(int amount, int index);
+
+int main(void)
+{
+int i;
+int amount;
+
+scanf("%d", &value_type);
+if (value_type>MAX_TYPE || value_type<1) return 0;
+
+for (i=1; i<=value_type; i++) {
+scanf("%d", &value[i-1]);
+}
+
+scanf("%d", &amount);
+change(amount, 0);
+
+return 0;
+}
+
+void show()
+{
+int i;
+printf("(%d", number[0]);
+for (i=1; i<value_type; i++) {
+printf(",%d", number[i]);
+}
+printf(")\n");
+}
+
+void change(int amount, int index)
+{
+
+if (index<value_type) {
+if (amount == 0) {
+show();
+} else if (amount > 0) {
+number[index]++; //use the present coin
+change(amount-value[index],index);
+number[index]--; //not use the present coin
+change(amount,index+1);
+}
+}
+}
+
+ 
+
+//---------------------------------------------------------
+//EX5:string comparison
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+char A[10];
+char B[20];
+printf("Enter the target to search for:");
+scanf("%s",A);
+printf("Enter the string to be searched:");
+scanf("%s",B);
+int count = 0;
+int i,j,eq;
+for(i=0;i<=strlen(B)-strlen(A);i++)
+{
+eq = 1;
+for(j=0;j<strlen(A);j++)
+{
+if(A[j]!=B[i+j])
+{
+eq = 0;
+break;
+}
+}
+if(eq) count++;
+}
+printf("%s occurs %d times in %s\n",A,count,B);
+
+return 0;
+}
+
+
+//---------------------------------------------------------
+//EX6: fish growth
+#include <stdio.h>
+#include <math.h>
+
+int main(void)
+{
+int a_num,b_num,year;
+float growth_rate;
+printf("initial fish number in pool A, initial fish number in pool B, growth rate, observation years:");
+scanf("%d %d %f %d", &a_num, &b_num, &growth_rate, &year);
+printf("Enter %d years of operation:\n",year);
+
+int i,move_num;
+char op;
+for(i=1;i<=year;i++)
+{
+while(getchar()!='\n'); // eat away useless space until \n
+scanf("%c %d",&op,&move_num);
+if(op=='A')
+{
+a_num = round(a_num*(1+growth_rate))- move_num;
+b_num = round(b_num*(1+growth_rate))+ move_num;
+}
+else if(op=='B')
+{
+b_num = round(b_num*(1+growth_rate))- move_num;
+a_num = round(a_num*(1+growth_rate))+ move_num;
+}
+}
+printf("At the end of %d years, \n",year);
+printf("fish num in pool A is %d\n",a_num);
+printf("fish num in pool B is %d\n",b_num);
+
+return 0;
+}
+
+//---------------------------------------------------------
+//EX7-1:製做密文
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+int main(void)
+{
+unsigned char key;
+char ch;
+
+srand(time(NULL));
+key = rand()%157 + 50; //key = 50~206
+
+freopen("original_text.txt", "r", stdin);
+freopen("cipher.txt", "w", stdout);
+while((ch=getchar())!=EOF)
+{
+ch = ch ^ key; //XOR operation
+putchar(ch);
+}
+freopen("key.txt", "w", stdout);
+printf("key = %u",key);
+
+return 0;
+}
+
+//EX7-2:解密文
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+unsigned char key=53;
+char ch;
+freopen("cipher.txt", "r", stdin);
+freopen("decipher.txt", "w", stdout);
+while((ch=getchar())!=EOF)
+{
+ch = ch ^ key; //XOR operation
+putchar(ch);
+}
+
+return 0;
+}

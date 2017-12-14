@@ -1,0 +1,241 @@
+//EX1: Bitwise Operations
+#include <stdio.h>
+int main(void)
+{
+                                // int has 4 bytes ==> 4*8=32bits
+	unsigned int a=6,b=4;       // a   = 000...000110 ==> 6
+                                // b   = 000...000100 ==> 4
+	printf("a & b = %x\n",a&b); // a&b = 000...000100 ==> 4  (%x : expression in 16進位)
+	printf("a | b = %x\n",a|b); // a|b = 000...000110 ==> 6
+	printf("a ^ b = %x\n",a^b); // a^b = 000...000010 ==> 2
+	printf("~a = %x\n",~a);     // ~a  = 111...111001 ==> fffffff9
+	printf("~b = %x\n",~b);     // ~b  = 111...111011 ==> fffffffb
+	printf("a>>1 = %x\n",a>>1); // a>>1= 000...000011 ==> 3
+	printf("a<<1 = %x\n",a<<1); // a<<1= 000...001100 ==> c
+
+    return 0;
+}
+
+//---------------------------------------------------------
+//EX2: print positive binary integers
+#include <stdio.h>
+void dispbinary(unsigned int);
+
+int main(void)
+{
+    unsigned int a=6,b=4;
+
+	printf("a = ");     dispbinary(a);
+	printf("b = ");     dispbinary(b);
+	printf("a & b = "); dispbinary(a&b);
+	printf("a | b = "); dispbinary(a|b);
+	printf("a ^ b = "); dispbinary(a^b);
+	printf("~a = ");    dispbinary(~a);
+	printf("~b = ");    dispbinary(~b);
+	printf("a>>1 = ");  dispbinary(a>>1);
+	printf("a<<1 = ");  dispbinary(a<<1);
+    return 0;
+}
+
+void dispbinary(unsigned int value)
+{
+   int i;
+   unsigned int mask = 1<<31; //initially, let mask = 1000...000
+   for(i=0;i<=31;i++)
+   {
+      if((value & mask)!=0)
+	     printf("1");
+	  else
+	     printf("0");
+		 
+	  mask=mask>>1;
+   }
+   printf("\n");
+
+}
+
+//---------------------------------------------------------
+//EX3: swap 2 positive integers
+#include <stdio.h>
+void dispbinary(unsigned int);
+int main(void)
+{
+   unsigned int a=4,b=6;
+   printf("a:"); dispbinary(a);
+   printf("b:"); dispbinary(b);
+   printf("a:%d  b:%d\n",a,b);
+   a = a^b;
+   b = a^b;
+   a = a^b;
+   printf("a:"); dispbinary(a);
+   printf("b:"); dispbinary(b);
+   printf("a:%d  b:%d\n",a,b);
+   return 0;
+}
+
+void dispbinary(unsigned int value)
+{
+   int i;
+   unsigned int mask = 1<<31;
+   for(i=0;i<=31;i++)
+   {
+      if((value & mask)!=0)
+	     printf("1");
+	  else
+	     printf("0");
+		 
+	  mask=mask>>1;
+   }
+   printf("\n");
+
+}
+
+//---------------------------------------------------------
+//EX4: list all combinations
+#include <stdio.h>
+
+/*
+  mask[0]  = 000.................0001
+      [1]  = 000.................0010
+	  [2]  = 000.................0100
+	  [3]  = 000.................1000
+	  [4]  = 000.............00010000
+      [5]  = 000.............00100000
+	  [6]  = 000.............01000000
+	  [7]  = 000.............10000000
+	  [8]  = 000.........000100000000
+	  [9]  = 000.........001000000000
+	  [10] = 000.........010000000000
+	  [11] = 000.........100000000000
+	  [12] = 000.....0001000000000000
+	  [13] = 000.....0010000000000000
+	  [14] = 000.....0100000000000000
+	  [15] = 000.....1000000000000000
+*/	 
+			 
+int main(void)
+{
+   int mask[16] = {
+     0x00001, 0x00002, 0x00004, 0x00008,
+	 0x00010, 0x00020, 0x00040, 0x00080,
+	 0x00100, 0x00200, 0x00400, 0x00800,
+	 0x01000, 0x02000, 0x04000, 0x08000
+   };
+   
+   int N,i,j,boundary;
+   int num[16];
+   scanf("%d",&N);
+   for(i=0;i<N;i++)
+      scanf("%d",&num[i]);
+	  
+   boundary = 1<<N;
+   printf("== START ==\n");
+   for(i=0;i<boundary;i++)
+   {
+      for(j=0;j<N;j++)
+	  {
+	     if((i&mask[j])!=0) // if((i&(1<<j))!=0)
+		    printf("%4d  ",num[j]);
+	  }
+      printf("\n");
+   }
+   printf("== END ==\n");
+   
+   return 0;
+}
+//---------------------------------------------------------
+//EX5: 1-dim array use malloc()
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+   double* ptr;
+   int array_size,i;
+   printf("How many doubles do you want?");
+   scanf("%d",&array_size);
+   ptr = (double*)malloc(array_size*sizeof(double));
+   if(ptr == NULL) //check if mlloc is successful
+   {
+      printf("Memory allocation failed!!!\n");
+	  exit(EXIT_FAILURE);
+   }
+   for(i=0;i<array_size;i++)
+      ptr[i]=(double)rand()/RAND_MAX;
+   for(i=0;i<array_size;i++)
+      if(*(ptr+i)>0.5)
+	     printf("%d: %f\n",i,ptr[i]);
+
+   free(ptr);
+   return 0;   
+}
+
+//---------------------------------------------------------
+//EX6: 2-dim array use malloc()
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+   int *a,**b;
+   int rows,cols,i,j;
+   printf("How many rows & cols do you want?");
+   scanf("%d%d",&rows,&cols);
+   a = (int *)malloc(rows*cols*sizeof(int));
+   for(i=0;i<rows*cols;i++)
+      a[i]=i;
+   
+   b = (int**)malloc(rows*sizeof(int *));
+   //link b to a
+   for(i=0;i<rows;i++)
+      b[i] = &a[i*cols];
+	  
+   //print array by using a
+   printf("print array by using a...\n");
+   for(i=0;i<rows*cols;i++)
+      printf("%3d ",a[i]);
+   printf("\n");
+   
+   //print array by using b
+   printf("print array by using b...\n");
+   for(i=0;i<rows;i++)
+   {
+      for(j=0;j<cols;j++)
+	     printf("%3d ",b[i][j]);
+	  printf("\n");
+   }
+   
+   //beware of free order
+   free(b);
+   free(a);
+   return 0;   
+}
+//---------------------------------------------------------
+//EX7: another example using **
+#include <stdio.h>
+#include <stdlib.h>
+void float_alloc(float**,int); //ptr = float* ==> &ptr = & float * = float ** (check Method 1)
+
+int main(void)
+{
+   //pointer initialization
+   float* ptr = NULL;
+   int n,i;
+   printf("how many floats do you want?");
+   scanf("%d",&n);
+   float_alloc(&ptr,n);
+   
+   for(i=0;i<n;i++)
+      ptr[i]=(double)rand()/RAND_MAX;
+	  
+   for(i=0;i<n;i++)
+      printf("%f  ",ptr[i]);
+	  
+   free(ptr);
+   return 0;
+}
+
+void float_alloc(float **p,int sz) // p=&ptr ==> *p = ptr ==> float* ptr (check Method 2)
+{
+   *p = (float*)malloc(sz*sizeof(float));
+}
+
+//---------------------------------------------------------

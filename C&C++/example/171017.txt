@@ -1,0 +1,43 @@
+HW4-2 解答 (計中人員已協助解開封鎖，大家久等了)
+//HW4-2: read a random file (解答)
+#include <stdio.h>
+#include <string.h>
+#define WIDTH 100 //num of cols
+#define HEIGHT 1000 //num of rows
+
+int main(void)
+{
+freopen("random_letter.txt", "r", stdin);
+char table [1000][7];
+char line[110]; // spare some room for \n
+int i,j,status;
+//generate 1000 random numbers
+i = 1;
+while((status= scanf("%s",line)!=EOF))
+{
+for(j=0;j<strlen(line);j++)
+{
+if((line[j]=='P') && (line[j+1]=='e') && (line[j+2]=='t') && (line[j+3]=='e') && (line[j+4]=='r'))
+{
+table[i-1][0] = line[j-1];
+table[i-1][1] = 'P';
+table[i-1][2] = 'e';
+table[i-1][3] = 't';
+table[i-1][4] = 'e';
+table[i-1][5] = 'r';
+table[i-1][6] = line[j+5];
+}
+}
+
+i++;
+}
+freopen("Peter_location.txt", "w", stdout);
+for(i=0;i<1000;i++)
+{
+for(j=0;j<7;j++)
+printf("%c",table[i][j]);
+printf("\n");
+}
+
+return 0;
+}
