@@ -47,7 +47,6 @@ class Array(object):
 #    pointer = 0
     
     def __init__(self, obj):
-#        print(obj)
         self.obj = obj
     
     @property
@@ -57,8 +56,13 @@ class Array(object):
                 return (len(self.obj), len(self.obj[0]))
             else:
                 return (len(self.obj), )
+            
+    def __add__(self, other):
+        return list(map(lambda x, y: x + y, self.obj, other.obj))
     
-
+    def __mul__(self, scalar):
+        return Array([i * scalar for i in self.obj])
+    
     def scaling(self, remove_num):
         self.obj = list(map(lambda x: x / remove_num, self.obj))
     
@@ -88,73 +92,63 @@ class Matrix(Array):
         pass
     
     def interchange(self, col):
-        return (self.obj).sort(key=lambda x:x[col], reverse=True)
-#        tmp = self.obj[0]
-#        print(tmp)
-#        for i in self.obj:
-#            if i[col] > tmp[col]:
-#                tmp = self.obj
-#        return tmp
+        self.obj = selection_sort(self.obj, key=lambda x: x[col])
+
+
     
     def __repr__(self):
         _ = "\n      ".join([str(_) for _ in self.obj])
         return "array({})".format(_)
     
     def __str__(self):
-        return "\n ".join([str(_) for _ in self.obj])
-    
+        return "\n".join([str(_) for _ in self.obj])
 
-a = Matrix(S)
-b = Array([2, 2, 3])
-b.scaling(2)
-#print(a.form)
-#%%
+def inner_change(obj_name, first, second):
+        obj_name[first], obj_name[second] = obj_name[second], obj_name[first]
+
+
 def selection_sort(to_sort, key=None):
-
     if key != None:
         compare_list = list(map(key, to_sort))
-        
-    else:
-        from copy import copy as cp
-        compare_list = cp(to_sort)
 
     i = 0
-    while i < len(compare_list):
+    while i < len(to_sort):
         lowest = i
-        compare_item = compare_list[lowest]
+        compare_item = to_sort[lowest]
         j = i + 1
+        
         while j < len(to_sort):
-            
-            if compare_item > compare_list[j]:
+            if compare_item < to_sort[j]:
                 lowest = j
-                compare_item = compare_list[j]
+                compare_item = to_sort[j]
             j += 1
-
-
+        
         if lowest != i:
-            def inner_change(obj_name, first, second):
-                obj_name[first], obj_name[second] = obj_name[second], obj_name[first]
-            inner_change(to_sort, lowest, i)
-            inner_change(compare_list, lowest, i)
+            if key != None:
+                inner_change(to_sort, lowest, i)
+                inner_change(compare_list, lowest, i)
+            else:
+                inner_change(to_sort, lowest, i)
         i += 1
         
     return to_sort
 
+if __name__ == "__main__":
+    Z = [[0, 3, -6, 6, 4],
+         [3, -7, 8, -5, 8],
+         [-3, -9, 12, -9, 6]]
+    a = Matrix(Z)
+    a.interchange(0)
     
-Z = [[0, 3, -6, 6, 4],
-     [3, -7, 8, -5, 8],
-     [-3, -9, 12, -9, 6]]
-selection_sort([-3, -9, 12, -9, 6])
-selection_sort(Z, key=lambda x: x[0])
-##%%
-#def insertion_sort(to_sort):
-#	i=0
-#	while i <= len(to_sort)-1:
-#		hole = i;
-#		compare_item = to_sort[i]
-#		while hole > 0 and to_sort[hole-1]  > compare_item:
-#			to_sort[hole] = to_sort[hole-1]
-#			hole-=1
-#		to_sort[hole] = compare_item
-#		i+=1
-#	return to_sort
+    col = 0
+    for i in Z:
+        tmp = i
+        if tmp[col] < i[col]:
+            print('do it')
+    
+#    b = Array([-3, -9, 12, -9, 6])
+#    c = Array([-3, -9, 12, -9, 6])
+#    b.scaling(-3)
+
+    a
+    #print(a.form)
