@@ -36,18 +36,18 @@ Created on Mon Sep 17 21:16:32 2018
          [-3, -9, 12, -9, 6]]
 """
 
-
 from collections import Iterable
 
-S = [[2, -1, 3], 
-     [1, 1, 3]]
 
 
 class Array(object):
 #    pointer = 0
     
+    
     def __init__(self, obj):
         self.obj = obj
+        
+        self.__idx = 0
     
     @property
     def _num(self):
@@ -56,15 +56,35 @@ class Array(object):
                 return (len(self.obj), len(self.obj[0]))
             else:
                 return (len(self.obj), )
-            
+        
     def __add__(self, other):
-        return list(map(lambda x, y: x + y, self.obj, other.obj))
+        return Array(list(map(lambda x, y: x + y, self.obj, other.obj)))
     
     def __mul__(self, scalar):
         return Array([i * scalar for i in self.obj])
     
     def scaling(self, remove_num):
         self.obj = list(map(lambda x: x / remove_num, self.obj))
+    
+    def __getitem__(self, index):
+        return self.obj[index]
+    
+    def __setitem__(self, index, value):
+        self.obj[index] = value
+    
+    def __len__(self):
+        return len(self.obj)
+        
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            item = self.obj[self.__idx]
+        except IndexError:
+            raise StopIteration()
+        self.__idx += 1
+        return item
     
     def __repr__(self):
         return "array({})".format(self.obj)
@@ -77,6 +97,8 @@ class Array(object):
 class Matrix(Array):
     def __init__(self, array):
         super(Matrix, self).__init__(array)
+        self.obj = [Array(i) for i in self.obj]
+#        self.array = [Array(i) for i in array]
 #        self.array = array
 #        self.pivot_col_pointer = 0
     
@@ -91,14 +113,20 @@ class Matrix(Array):
     def replacement():
         pass
     
+#    def row_reduce(matrix):
+#    for i in range(1, matrix.form[0]):
+#        A[i] = A[i] - A[0]*(A[i,0]/A[0,0])      
+#    return(A)
+    
     def interchange(self, col):
         self.obj = selection_sort(self.obj, key=lambda x: x[col])
 
+    
 
     
     def __repr__(self):
-        _ = "\n      ".join([str(_) for _ in self.obj])
-        return "array({})".format(_)
+        _ = "\n       ".join([str(_) for _ in self.obj])
+        return "matrix({})".format(_)
     
     def __str__(self):
         return "\n".join([str(_) for _ in self.obj])
@@ -110,45 +138,68 @@ def inner_change(obj_name, first, second):
 def selection_sort(to_sort, key=None):
     if key != None:
         compare_list = list(map(key, to_sort))
+    else:
+        from copy import copy as cp
+        compare_list = cp(to_sort)
 
     i = 0
-    while i < len(to_sort):
+    while i < len(compare_list):
         lowest = i
-        compare_item = to_sort[lowest]
+        compare_item = compare_list[lowest]
         j = i + 1
         
-        while j < len(to_sort):
-            if compare_item < to_sort[j]:
+        while j < len(compare_list):
+            if compare_item < compare_list[j]:
                 lowest = j
-                compare_item = to_sort[j]
+                compare_item = compare_list[j]
             j += 1
         
         if lowest != i:
-            if key != None:
-                inner_change(to_sort, lowest, i)
-                inner_change(compare_list, lowest, i)
-            else:
-                inner_change(to_sort, lowest, i)
+            inner_change(to_sort, lowest, i)
+            inner_change(compare_list, lowest, i)
+
         i += 1
         
     return to_sort
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    
     Z = [[0, 3, -6, 6, 4],
          [3, -7, 8, -5, 8],
          [-3, -9, 12, -9, 6]]
+    
     a = Matrix(Z)
     a.interchange(0)
-    
-    col = 0
-    for i in Z:
-        tmp = i
-        if tmp[col] < i[col]:
-            print('do it')
+    for col in [0]:
+        for idx in range(1, a.form[0]):
+            print(idx, col)
+            if a[idx][col] != 0:
+                print("do it{}{}   {}".format(idx, col, a[idx][col]))
+            
     
 #    b = Array([-3, -9, 12, -9, 6])
 #    c = Array([-3, -9, 12, -9, 6])
 #    b.scaling(-3)
 
-    a
+#    a
     #print(a.form)
+#%%
+# 写一个n*n非奇异线性方程组求解函数
+# Elimination：消元
+def Elimination1(A):
+    for i in range(1, A.shape[0]):
+        A[i] = A[i] - A[0]*(A[i,0]/A[0,0])      
+    return(A)
+
+def Elimination(A):
+    j = A.shape[0] - 1
+    i = 0
+    while j > 0:
+        A[i:,i:] = Elimination1(A[i:,i:])
+        i = i + 1
+        j = j - 1
+    return(A)
+
+import numpy as np
+A = np.matrix([[1,2,3,6],[3,1,0,3],[-1,1,0,3]])
+Elimination(A)
