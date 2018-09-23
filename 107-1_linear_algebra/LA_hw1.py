@@ -87,9 +87,11 @@ class Array(object):
         return item
     
     def __repr__(self):
+        self.obj = [round(i, 3) for i in self.obj] 
         return "array({})".format(self.obj)
     
     def __str__(self):
+        self.obj = [round(i, 3) for i in self.obj] 
         return "{}".format(self.obj)
 
 
@@ -110,13 +112,8 @@ class Matrix(Array):
     # sort the order of array, if leadering entry
         pass
 
-    def replacement():
-        pass
-    
-#    def row_reduce(matrix):
-#    for i in range(1, matrix.form[0]):
-#        A[i] = A[i] - A[0]*(A[i,0]/A[0,0])      
-#    return(A)
+    def replacement(self, a, b, coefi):
+        self.obj[a] = self.obj[b].__mul__(coefi) + self.obj[a]
     
     def interchange(self, col):
         self.obj = selection_sort(self.obj, key=lambda x: x[col])
@@ -203,3 +200,31 @@ def Elimination(A):
 import numpy as np
 A = np.matrix([[1,2,3,6],[3,1,0,3],[-1,1,0,3]])
 Elimination(A)
+
+#%%
+
+A = [[3, 7, 7, 6],
+     [1, 3, 4, -2],
+     [0, 1, 4, -5]]
+
+A = [[1, 0, 3, 0, 2],
+     [0, 1, 0, -3, 3],
+     [0, -2, 3, 2, 1],
+     [3, 0, 0, 7, -5]]
+
+A = [[1, 2, 1, 4],
+     [0, 1, -1, 1],
+     [1, 3, 0, 0]]
+
+A = [[1, 3, 5, 7],
+     [3, 5, 7, 9],
+     [5, 7, 9, 1]]
+
+A = [[3, -4, 2, 0],
+     [-9, 12, -6, 0],
+     [-6, 8, -4, 0]]
+
+
+
+
+A = Matrix(A)
