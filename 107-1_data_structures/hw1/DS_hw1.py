@@ -6,20 +6,7 @@ Created on Mon Sep 24 16:51:08 2018
 @author: wei
 """
 
-def bigger(*num):
-    max_num = num[0]
-    i = 0
-    condition = len(num)-1
-    while i < condition:
-        i += 1
-        if num[i] > max_num:
-            max_num= num[i]
-        else:
-            continue
 
-    return max_num
-
-bigger(1, 2, 3, 7, 4, 1, 5)
 
 #%%
 import numpy as np
@@ -123,17 +110,16 @@ selection_sort(A)
 
 #%%
 
-def square(num):
-    x0 = num / 2
-    
-    def innerfunc(num, x0):
-        if abs(num - x0 * x0) < 0.00001:
-            return x0
-        x0 = (x0 * x0 + num) / (2 * x0)
-        return innerfunc(num, x0)
-    
-    return innerfunc(num, x0)
-square(9)
+
+def NM(num, x0=None):
+    if x0 == None:
+        return NM(num, num/2)
+    if abs(num - x0 * x0) < 0.00001:
+        return x0
+    x0 = (x0 * x0 + num) / (2 * x0)
+    return NM(num, x0)
+
+NM(9)
         
     
     
