@@ -65,7 +65,7 @@ def IDvalidation(IDnumber):
     midnums = head[prefix]['num'] + midnums    
     midnums = np.array([int(i) for i in midnums])
     coefi = np.array([1, 9, 8, 7, 6, 5, 4, 3, 2, 1])
-    verify = 10 - sum(midnums * coefi) % 10 # the formula of check
+    verify = 10 - np.dot(midnums, coefi) % 10 # the formula of check
     
     if verify != int(checknum):
         return "失效"
@@ -73,5 +73,9 @@ def IDvalidation(IDnumber):
     return "有效"
  
 if __name__=="__main__":
+    h = IDvalidation.__doc__
+    print('第二題')
+    print(h)
     rst = IDvalidation('a130637749')
     print("this ID is {}".format(rst))
+    print('\n')

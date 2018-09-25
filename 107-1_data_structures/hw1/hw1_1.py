@@ -27,5 +27,9 @@ def bigger(first_num, *num):
     return max_num
 
 if __name__=="__main__":
+    h = bigger.__doc__
+    print('第一題')
+    print(h)
     rst= bigger(1, 2, 3, 7, 4, 1, 5)
     print("the one of result is {}".format(rst))
+    print('\n')
