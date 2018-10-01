@@ -36,8 +36,10 @@ Created on Mon Sep 17 21:16:32 2018
          [-3, -9, 12, -9, 6]]
 """
 
+import numpy as np
+from numpy import matrix
 
-from numpy import matrix 
+
 
 
 def scaling():
@@ -81,36 +83,92 @@ def selection_sort(to_sort, key=None):
     return to_sort
 
 
+S = [[2, -1, 3], 
+     [1, 1, 3]]
+
+T = [[1, 2, 3],
+     [2, 4, 5]]
+
+U = [[1, -4, 1],
+     [2, -1, -3],
+     [-1, -3, 4]]
+
 V = [[1, 1, 1, 4],
      [-1, -1, 1, -2],
      [2, -1, 2, 2]]
+
+W = [[0, 1, -4, 8],
+     [2, -3, 2, 1],
+     [5, -8, 7, 1]]
 
 Z = [[0, 3, -6, 6, 4],
      [3, -7, 8, -5, 8],
      [-3, -9, 12, -9, 6]]
 
-a = matrix(Z)
-
+a = matrix(W).astype(np.float64)
+print(a)
 col = 0
-pointer = (0, 0)
+privit = []
 while col < a.shape[1]:
     row = col + 1
+    head = row - 1
     
+    a[head:, col:] = selection_sort(a[head:, col:], key=lambda x: abs(x[0]))
+    
+    col_1 = col
+    while 1:
+        if a.item(head, col_1) != 0:
+            privit.append((head, col_1))
+            break
+        if a.item(head, col_1) == 0:
+            col_1 = col + 1
+        if col_1 >= a.shape[1]:
+            print('最後一向free')
+            break
+
     if row >= a.shape[0]:
         break
-    a[row-1:, col:] = selection_sort(a[row-1:, col:], key=lambda x: abs(x[0]))
-    print(a)
-    head = row - 1
+    
+    
+    
+    
+    
     while row < a.shape[0]:
         
         k = a.item(row, col)
-        print(row, col, k, head)
+#        print(row, col, k, head)
         
         if  k != 0:
-            print(-a[row, 0] , a[head, col])
+#            print(-a[row, 0] , a[head, col])
             scale = -(a[row, col] / a[head, col])
             a[row, :] = a[row, :] + a[head, :] * scale
+            
+        print(a)
         row += 1
-    print(a, '\n')
-    col += 1    
+#    print(a, '\n')
+    
+    col += 1
+
+for i, j in privit:
+#    print(i, j)
+    scale = a.item(i, j)
+    if scale == 0:
+        continue
+    a[i] = a[i] / scale
+
+print(a)
+
+privit.reverse()
+for i, j in privit:
+    row = i
+    col = j
+    while i > 0:
+        i -= 1
+#        print(a[i], a[i, j])
+        a[i] = a[i] + a[row] * -(a[i, j] / a[row, col])
+    print(a)
+print(a)
+        
+        
+
     
