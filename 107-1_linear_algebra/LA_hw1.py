@@ -40,7 +40,40 @@ import numpy as np
 from numpy import matrix
 
 
+def data(num):
+    S = [[2, -1, 3], 
+         [1, 1, 3]]
 
+    T = [[1, 2, 3],
+         [2, 4, 5]]
+    
+    U = [[1, -4, 1],
+         [2, -1, -3],
+         [-1, -3, 4]]
+    
+    V = [[1, 1, 1, 4],
+         [-1, -1, 1, -2],
+         [2, -1, 2, 2]]
+    
+    W = [[0, 1, -4, 8],
+         [2, -3, 2, 1],
+         [5, -8, 7, 1]]
+    
+    Z = [[0, 3, -6, 6, 4],
+         [3, -7, 8, -5, 8],
+         [-3, -9, 12, -9, 6]]
+    if num == 1:
+        return S
+    if num == 2:
+        return T
+    if num == 3:
+        return U
+    if num == 4:
+        return V
+    if num == 5:
+        return W
+    if num == 6:
+        return Z
 
 def scaling():
     pass
@@ -83,92 +116,72 @@ def selection_sort(to_sort, key=None):
     return to_sort
 
 
-S = [[2, -1, 3], 
-     [1, 1, 3]]
+    
+    
 
-T = [[1, 2, 3],
-     [2, 4, 5]]
+a = matrix(data(1)).astype(np.float64); print(a)
 
-U = [[1, -4, 1],
-     [2, -1, -3],
-     [-1, -3, 4]]
-
-V = [[1, 1, 1, 4],
-     [-1, -1, 1, -2],
-     [2, -1, 2, 2]]
-
-W = [[0, 1, -4, 8],
-     [2, -3, 2, 1],
-     [5, -8, 7, 1]]
-
-Z = [[0, 3, -6, 6, 4],
-     [3, -7, 8, -5, 8],
-     [-3, -9, 12, -9, 6]]
-
-a = matrix(W).astype(np.float64)
-print(a)
+# forward-phase
 col = 0
-privit = []
-while col < a.shape[1]:
-    row = col + 1
-    head = row - 1
+row = 0
+pivot = []
+row_max, col_max = a.shape
+while row < row_max and col < col_max:
+    a[row:, col:] = selection_sort(a[row:, col:], key=lambda x: abs(x[0])); print(a)
     
-    a[head:, col:] = selection_sort(a[head:, col:], key=lambda x: abs(x[0]))
-    
-    col_1 = col
-    while 1:
-        if a.item(head, col_1) != 0:
-            privit.append((head, col_1))
-            break
-        if a.item(head, col_1) == 0:
-            col_1 = col + 1
-        if col_1 >= a.shape[1]:
-            print('最後一向free')
-            break
+    # let value under pivot be 0 
+    i = row + 1
+    while i < row_max:
+        leading_entry = a.item(i, col)
+        if  leading_entry != 0:
+            scale = -(a[i, col] / a[row, col])
+            a[i] = a[i] + a[row] * scale
+            print(a)
+        i += 1
 
-    if row >= a.shape[0]:
-        break
-    
-    
-    
-    
-    
-    while row < a.shape[0]:
-        
-        k = a.item(row, col)
-#        print(row, col, k, head)
-        
-        if  k != 0:
-#            print(-a[row, 0] , a[head, col])
-            scale = -(a[row, col] / a[head, col])
-            a[row, :] = a[row, :] + a[head, :] * scale
-            
-        print(a)
-        row += 1
-#    print(a, '\n')
+    # find pivot(here have some error, must be fix)
+    j = col
+    while 1:
+        if a.item(row, j) != 0:
+            pivot.append((row, j))
+            break
+        if a.item(row, j) == 0:
+            j = col + 1
+        if j >= col_max:
+            print('最後一向free')
+            break  
     
     col += 1
+    row += 1
 
-for i, j in privit:
+# scaling
+for i, j in pivot:
 #    print(i, j)
     scale = a.item(i, j)
     if scale == 0:
         continue
     a[i] = a[i] / scale
+    print(a)
 
-print(a)
-
-privit.reverse()
-for i, j in privit:
-    row = i
-    col = j
+# back-phase
+pivot.reverse()
+for row, col in pivot:
+    i = row
     while i > 0:
         i -= 1
-#        print(a[i], a[i, j])
-        a[i] = a[i] + a[row] * -(a[i, j] / a[row, col])
-    print(a)
-print(a)
+        scale = -(a[i, col] / a[row, col])
+        a[i] = a[i] + a[row] * scale
+        print(a)
+#
+#X = {}
+#for i in range(a.shape[1]-1):
+#    print(i, i)
+#    if a.item(i, i) != 1:
+#        print('this is inconsistient')
+#        
+#    X[i+1] = a.item(i, -1)
+#print(X)
+    
         
         
 
-    
