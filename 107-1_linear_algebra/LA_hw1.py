@@ -77,45 +77,42 @@ import functools
 import numpy as np
 from numpy import matrix
 
-def log(func):
+def log_method(func):
     @functools.wraps(func)
     def wrapper(*args, **kw):
-#        print('call %s():' % func.__name__)
-        return func(*args, **kw)
+        print('\tdo {}():'.format(func.__name__))
+#        print('\tinput:\n', args[0])
+        func(*args, **kw)
+        rst_str = args[0].__str__().replace('\n', '\n\t ')
+        print('\t method_rst: \n', '\t {} \n'.format(rst_str))
     return wrapper
-def print_rst(func):
+
+def log_method_phase(func):
     @functools.wraps(func)
     def wrapper(*args, **kw):
-        rst = func(*args, **kw)
-#        print('hh', rst)
-        return rst
-    return wrapper
-def gg(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kw):
-#        print('hh', super(func, __self__).__self__)
-        return func(*args, **kw)
+        print('\n', '___'*18)
+        print('\n', 'do {}():'.format(func.__name__))
+        func(*args, **kw)
+        rst_str = args[0].__repr__().replace('\n', '\n ')
+        print('{}_rst: \n'.format(func.__name__), rst_str)
     return wrapper
 
 class my_matrix(matrix):
     
-#    def __
-    @log
+    @log_method_phase
     def forward_phase(self):
         row = 0
         col = 0
         self._pivot = []
         row_max, col_max = self.shape
         while row < row_max and col < col_max:
-            self[row:, col:] = self._selection_sort(self[row:, col:]);print(self, '\n')
-#            print(type(self[row:, col:]))
+            self.interchange(row, col)
             # let value under pivot be 0 
             i = row + 1
             while i < row_max:
                 leading_entry = self.item(i, col)
                 if  leading_entry != 0:
                     self.replacement(row, col, i)
-                    print(self, '\n')
                 i += 1
         
             # find pivot(here have some error, must be fix)
@@ -127,13 +124,15 @@ class my_matrix(matrix):
                 if self.item(row, j) == 0:
                     j = col + 1
                 if j >= col_max:
-                    print('最後一向free')
+                    print('\t發現最後一列是free')
+                    self.scaling()
                     return  
     
             col += 1
             row += 1
+        self.scaling()
             
-    @log
+    @log_method_phase
     def back_phase(self):
         a = self._pivot
         pivot = a
@@ -142,28 +141,25 @@ class my_matrix(matrix):
             while i > 0:
                 i -= 1
                 self.replacement(row, col, i)
-                print(self, '\n')
-    @log
-    def interchange():
-        pass
-    @log
+                
+    @log_method
+    def interchange(self, row, col):
+        self[row:, col:] = self._selection_sort(self[row:, col:])
+    
+    @log_method
     def scaling(self):
         for i, j in self._pivot:
             scale = self.item(i, j)
             if scale == 0:
                 continue
             self[i] = self[i] / scale
-            print(self, '\n')
-#    @log
-    @gg
+            
+    @log_method
     def replacement(self, row, col, i):
         scale = -(self[i, col] / self[row, col])
         self[i] = self[i] + self[row] * scale
-        
     
     @staticmethod
-#    @log
-    @print_rst
     def _selection_sort(to_sort, key=lambda x: abs(x[0])):
         def inner_change(obj_name, first, second):
             obj_name[first], obj_name[second] = obj_name[second], obj_name[first]
@@ -188,16 +184,21 @@ class my_matrix(matrix):
                 inner_change(compare_list, lowest, i)
     
             i += 1
-        return matrix(to_sort)
+        return my_matrix(to_sort)
+    
+    def get_solution(self):
+        pass        
         
         
         
-        
-a = data(4)
-a = my_matrix(a).astype(np.float64)
-a.forward_phase()
-a.scaling()
-a.back_phase()
+if __name__=="__main__":
+    for i in range(1, 7):
+        a = data(i)
+        a = my_matrix(a).astype(np.float64)
+        print('{}\n'.format(i), a.__repr__())
+        a.forward_phase()
+        a.back_phase()
+        print('\n' * 3, '===' * 18, '\n')
 
 '''
 # get the general solution
