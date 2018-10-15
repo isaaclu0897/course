@@ -7,6 +7,7 @@ Created on Mon Oct 15 23:21:46 2018
 """
 
 def PA_r(height):
+    # use Recursively by relation
     def inner_func(n, k):
         if k == 0 or k == n:
             return 1
@@ -15,18 +16,18 @@ def PA_r(height):
             right = inner_func(n-1, k-1)
             return left + right
         
-    height = 6
     a = []
     for n in range(height+1):
         b = []
         for k in range(n+1):
             b.append(inner_func(n, k))
         a.append(b)
+        
     return a
 
 
 def PA_n(height):
-    height = 6
+    # just do it, non-recursion
     a = []
     for n in range(height+1):
         b = []
@@ -36,21 +37,23 @@ def PA_n(height):
             else:
                 b.append(a[n-1][k]+a[n-1][k-1])
         a.append(b)
+        
     return a
             
 
     
 def PA_d(height):
+    # use combination by formula, but the factorial use recursion
     def inner_func(n, k):
         return int(factorial(n) / ((factorial(k) * factorial(n-k))))
         
-    height = 6
     a = []
     for n in range(height+1):
         b = []
         for k in range(n+1):
             b.append(inner_func(n, k))
         a.append(b)
+        
     return a
 
 def factorial(n):
